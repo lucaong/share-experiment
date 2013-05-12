@@ -1,7 +1,10 @@
 <header class="channel-header clearfix">
   <h1 class="pull-left"><%= channel.slug %></h1>
   <menu class="pull-right">
-    <a href="#share" class="btn btn-info" role="button" data-toggle="modal">Share this Space</a>
+    <a href="#share" class="btn btn-info" role="button" data-toggle="modal">
+      <i class="icon-share-alt icon-white"></i>
+      Share this Space
+    </a>
   </menu>
 </header>
 
@@ -16,7 +19,7 @@
 <form method="post">
   <textarea name="body" placeholder="Your message here"></textarea>
   <button class="btn btn-large btn-success" type="submit">
-    Post
+    Send
   </button>
 </form>
 
