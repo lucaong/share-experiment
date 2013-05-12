@@ -1,0 +1,36 @@
+<header class="channel-header clearfix">
+  <h1 class="pull-left"><%= channel.slug %></h1>
+  <menu class="pull-right">
+    <a href="#share" class="btn btn-info" role="button" data-toggle="modal">Share this Space</a>
+  </menu>
+</header>
+
+<ul class="messages">
+  <% channel.messages.each do |message| %>
+    <li data-author="<%= message.author %>">
+      <%= message.body %>
+    </li>
+  <% end %>
+</ul>
+
+<form method="post">
+  <textarea name="body" placeholder="Your message here"></textarea>
+  <button class="btn btn-large btn-success" type="submit">
+    Post
+  </button>
+</form>
+
+<aside class="modal hide fade" role="dialog" id="share">
+  <header class="modal-header">
+    <button class="close" data-dismiss="modal">×</button>
+    <h2>Share this Space</h2>
+  </header>
+  <section class="modal-body">
+    <h3>Scan this QR Code:</h3>
+    <img src="http://qrfree.kaywa.com/?l=1&s=8&d=<%= CGI::escape request.url %>">
+
+    <hr>
+
+    <h3>Or just type this code: <%= channel.slug %></h3>
+  </section>
+</aside>
