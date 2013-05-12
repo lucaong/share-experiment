@@ -1,0 +1,80 @@
+[role=main] {
+  max-width: 700px;
+
+  .centered {
+    text-align: center;
+  }
+
+  .jumbo {
+    margin: 40px 0;
+    h1 {
+      line-height: 1;
+    }
+
+    .lead {
+      font-size: 21px;
+      list-style: none;
+      counter-reset: lead-list;
+
+      li {
+        display: inline;
+        counter-increment: lead-list;
+        margin-right: 0.5em;
+        white-space: nowrap;
+
+        &:before {
+          content: counter(lead-list) ".";
+          font-weight: bold;
+          display: inline-block;
+          margin-right: 0.25em;
+        }
+      }
+    }
+  }
+
+  .channel-header {
+    text-align: left;
+  }
+
+  .messages {
+    text-align: left;
+    list-style: none;
+    margin: 1em 0;
+    padding: 0;
+
+    &, * {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      -ms-box-sizing: border-box;
+      -o-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    li {
+      padding: 0.618em 1em;
+      width: 100%;
+
+      &:before {
+        content: attr(data-author) ":";
+        display: inline-block;
+        color: #999;
+        margin-right: 0.25em;
+      }
+
+      &:nth-child(even) {
+        background: #eee;
+      }
+    }
+  }
+
+  // Forms
+
+  textarea {
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+}

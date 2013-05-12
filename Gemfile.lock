@@ -15,7 +15,14 @@ GEM
     arel (3.0.2)
     backports (3.3.0)
     builder (3.0.4)
+    coffee-script (2.2.0)
+      coffee-script-source
+      execjs
+    coffee-script-source (1.6.1)
     eventmachine (1.0.3)
+    execjs (1.4.0)
+      multi_json (~> 1.0)
+    hike (1.2.1)
     i18n (0.6.1)
     multi_json (1.7.3)
     rack (1.5.2)
@@ -24,6 +31,7 @@ GEM
     rack-test (0.6.2)
       rack (>= 1.0)
     rake (10.0.3)
+    sass (3.2.7)
     shotgun (0.9)
       rack (>= 1.0)
     sinatra (1.4.2)
@@ -40,6 +48,11 @@ GEM
       rack-test
       sinatra (~> 1.4.2)
       tilt (~> 1.3)
+    sprockets (2.2.2)
+      hike (~> 1.2)
+      multi_json (~> 1.0)
+      rack (~> 1.0)
+      tilt (~> 1.1, != 1.3.0)
     sqlite3 (1.3.7)
     tilt (1.4.1)
     tzinfo (0.3.37)
@@ -49,9 +62,13 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord
+  activesupport
+  coffee-script
   rake
+  sass
   shotgun
   sinatra
   sinatra-activerecord
   sinatra-contrib
+  sprockets (~> 2.0)
   sqlite3
