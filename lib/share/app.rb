@@ -59,7 +59,9 @@ module Share
     post "/:slug" do
       channel = Channel.find_by_slug params[:slug]
       message = channel.messages.create body: params[:body]
-      respond_with :show, channel: channel
+      respond_with :show, channel: channel do |type|
+        type.json { message.to_json }
+      end
     end
   end
 end

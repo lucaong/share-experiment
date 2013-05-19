@@ -6,5 +6,13 @@ module Share
       # TODO: this is a stub
       "Anonymous"
     end
+
+    def as_json(options = {})
+      return {
+        body:       body,
+        author:     author,
+        created_at: created_at
+      }
+    end
   end
 end

@@ -10,13 +10,15 @@
 
 <ul class="messages">
   <% channel.messages.each do |message| %>
-    <li data-author="<%= message.author %>">
+    <li
+      data-author="<%= message.author %>"
+      data-created-at="<%= message.created_at %>">
       <%= message.body %>
     </li>
   <% end %>
 </ul>
 
-<form method="post">
+<form id="new_message" method="post">
   <textarea name="body" placeholder="Your message here"></textarea>
   <button class="btn btn-large btn-success" type="submit">
     Send
