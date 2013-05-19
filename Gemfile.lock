@@ -12,6 +12,7 @@ GEM
     activesupport (3.2.13)
       i18n (= 0.6.1)
       multi_json (~> 1.0)
+    addressable (2.3.4)
     arel (3.0.2)
     backports (3.3.0)
     builder (3.0.4)
@@ -19,10 +20,31 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.1)
+    cookiejar (0.3.0)
+    daemons (1.1.9)
+    em-http-request (1.0.3)
+      addressable (>= 2.2.3)
+      cookiejar
+      em-socksify
+      eventmachine (>= 1.0.0.beta.4)
+      http_parser.rb (>= 0.5.3)
+    em-socksify (0.2.1)
+      eventmachine (>= 1.0.0.beta.4)
     eventmachine (1.0.3)
     execjs (1.4.0)
       multi_json (~> 1.0)
+    faye (0.8.9)
+      cookiejar (>= 0.3.0)
+      em-http-request (>= 0.3.0)
+      eventmachine (>= 0.12.0)
+      faye-websocket (>= 0.4.0)
+      rack (>= 1.0.0)
+      yajl-ruby (>= 1.0.0)
+    faye-websocket (0.6.1)
+      eventmachine (>= 0.12.0)
+      websocket-driver (>= 0.2.0)
     hike (1.2.1)
+    http_parser.rb (0.5.3)
     i18n (0.6.1)
     multi_json (1.7.3)
     rack (1.5.2)
@@ -54,8 +76,14 @@ GEM
       rack (~> 1.0)
       tilt (~> 1.1, != 1.3.0)
     sqlite3 (1.3.7)
+    thin (1.5.1)
+      daemons (>= 1.0.9)
+      eventmachine (>= 0.12.6)
+      rack (>= 1.0.0)
     tilt (1.4.1)
     tzinfo (0.3.37)
+    websocket-driver (0.2.0)
+    yajl-ruby (1.1.0)
 
 PLATFORMS
   ruby
@@ -64,6 +92,7 @@ DEPENDENCIES
   activerecord
   activesupport
   coffee-script
+  faye
   rake
   sass
   shotgun
@@ -72,3 +101,4 @@ DEPENDENCIES
   sinatra-contrib
   sprockets (~> 2.0)
   sqlite3
+  thin
