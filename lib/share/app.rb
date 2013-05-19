@@ -31,16 +31,6 @@ module Share
       end
     end
 
-    post "/test" do
-      puts params.inspect
-      params.inspect
-    end
-
-    get "/test" do
-      puts params.inspect
-      params.inspect
-    end
-
     # show channel
     get "/:slug" do
       channel = Channel.find_by_slug params[:slug]
