@@ -3,11 +3,6 @@ module Share
     belongs_to :channel
     before_create :markup_body
 
-    def author
-      # TODO: this is a stub
-      "Anonymous"
-    end
-
     def as_json(options = {})
       return {
         body:       body,

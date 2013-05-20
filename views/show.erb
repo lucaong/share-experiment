@@ -39,3 +39,17 @@
     <h3>Or just type this code: <%= channel.slug %></h3>
   </section>
 </aside>
+
+<form class="modal hide fade" role="dialog" id="author_prompt">
+  <header class="modal-header">
+    <button class="close" data-dismiss="modal">×</button>
+    <h2>Choose a Name</h2>
+  </header>
+  <section class="modal-body">
+    <input type="text" name="author_name" placeholder="Your name here">
+  </section>
+  <footer class="modal-footer">
+    <button class="btn btn-primary" type="submit">Ok</button>
+    <button class="btn" data-dismiss="modal">Cancel</button>
+  </footer>
+</form>

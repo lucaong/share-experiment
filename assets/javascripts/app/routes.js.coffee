@@ -7,6 +7,8 @@ Router = new Cartograph ->
     scrollToBottom()
     updateTimeAgo()
     pubsub = new Faye.Client "/faye"
+    authorCookie = new Cookie("#{slug}_author")
+
     pubsub.subscribe "/channels/#{ slug }", ( message ) ->
       $li = $("<li>")
         .attr
@@ -20,16 +22,30 @@ Router = new Cartograph ->
 
     $("#new_message").on "submit keyup", ( event ) ->
       return true if event.type is "keyup" and event.which isnt 13
+      author = authorCookie.get()
+      unless author?
+        $("#author_prompt").modal()
+        return true
       event.preventDefault()
       $input = $(@).find("[name=body]")
       body = $input.val()
       $input.val("")
       if body.length
-        $.post( "/#{slug}", { body: body }, "json" )
+        $.post( "/#{slug}", { body: body, author: author }, "json" )
           .done ( data ) ->
             pubsub.publish "/channels/#{slug}", data
           .fail ->
             alert "Failed sending message"
+
+    $("#author_prompt").on "submit keyup", ( event ) ->
+      return true if event.type is "keyup" and event.which isnt 13
+      event.preventDefault()
+      $form = $(@)
+      name = $form.find("[name=author_name]").val()
+      if name.length
+        authorCookie.set( name )
+        $form.modal("hide")
+        $("#new_message").submit()
 
 scrollToBottom = ->
   $ul = $("ul.messages")
