@@ -13,7 +13,7 @@ Router = new Cartograph ->
           "data-author":     message.author,
           "data-created-at": message.created_at,
           "data-time-ago":   moment( message.created_at ).fromNow()
-        .text message.body
+        .html message.body
       $("ul.messages").append $li
       scrollToBottom()
       updateTimeAgo()
