@@ -89,3 +89,11 @@
     box-sizing: border-box;
   }
 }
+
+@media (max-height: 480px) {
+  [role=main] {
+    .messages {
+      max-height: 240px;
+    }
+  }
+}
