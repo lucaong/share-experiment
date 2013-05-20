@@ -14,6 +14,7 @@ gem "faye"
 gem "thin"
 
 gem "sprockets", "~> 2.0"
+gem "sprockets-helpers"
 gem "coffee-script"
 gem "sass"
 

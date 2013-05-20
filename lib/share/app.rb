@@ -2,6 +2,8 @@ require "sinatra/base"
 require "sinatra/activerecord"
 require "sinatra/contrib"
 require "erb"
+require "sprockets"
+require "sinatra/sprockets-helpers"
 require "./lib/share/channel"
 require "./lib/share/message"
 
@@ -9,8 +11,23 @@ module Share
   class App < Sinatra::Base
     register Sinatra::ActiveRecordExtension
     register Sinatra::Contrib
+
     set :database, "sqlite3:///share.sqlite3"
     set :root, "./"
+    set :public_folder, "./public"
+
+    # asset pipeline
+    register Sinatra::Sprockets::Helpers
+    set :sprockets, Sprockets::Environment.new
+    set :assets_prefix, "/assets"
+    set :assets_path, -> { File.join( public_folder, assets_prefix ) }
+    set :digest_assets, production?
+    configure_sprockets_helpers
+    configure do
+      sprockets.append_path "assets/images"
+      sprockets.append_path "assets/stylesheets"
+      sprockets.append_path "assets/javascripts"
+    end
 
     # test
     post "/test" do
