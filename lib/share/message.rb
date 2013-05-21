@@ -1,20 +1,70 @@
-module Share
-  class Message < ActiveRecord::Base
-    belongs_to :channel
-    before_create :markup_body
+require "redis"
 
-    def as_json(options = {})
+module Share
+  class Message
+    attr_accessor :body, :author, :created_at, :id
+
+    module ClassMethods
+      def all_in_channel( channel )
+        ids = redis.zrange redis_ids_key( channel.id ), 0, -1
+        return [] if ids.empty?
+        keys = ids.map { |i| redis_key( channel.id, i ) }
+        redis.mget( *keys ).map do |raw|
+          new JSON.parse( raw )
+        end
+      end
+
+      def redis_ids_key( channel_id )
+        "shareapp:channels:#{channel_id}:message_ids"
+      end
+
+      def redis_key( channel_id, message_id )
+        "shareapp:channels:#{channel_id}:messages:#{message_id}"
+      end
+
+      def redis
+        @_redis ||= Redis.new
+      end
+    end
+
+    extend ClassMethods
+
+    def to_json
       return {
         body:       body,
         author:     author,
         created_at: created_at
-      }
+      }.to_json
+    end
+
+    def initialize( attrs )
+      @body       = attrs["body"]
+      @author     = attrs["author"]
+      @created_at = attrs["created_at"]
+    end
+
+    def persist_to_channel!( channel )
+      process!
+      self.created_at = Time.now.utc.to_s
+      ids_key = self.class.redis_ids_key( channel.id )
+      redis.watch( ids_key ) do
+        id = redis.zcard( ids_key ) + 1
+        redis.multi do
+          key = self.class.redis_key( channel.id, id )
+          redis.mset key, to_json
+          redis.zadd self.class.redis_ids_key( channel.id ), Time.now.utc.to_i, id
+        end
+      end
     end
 
     private
 
-    def markup_body
-      # Escape html (but not slashes)
+    def redis
+      self.class.redis
+    end
+
+    def process!
+      # Escape body (but leave slashes)
       body.gsub! /&|<|>|'|"/ do |c|
         escaped = {
           "&"=>"&amp;",
@@ -43,6 +93,9 @@ module Share
       body.gsub! /(\b)([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4})(\b)/i do
         "#{$1}<a href='mailto:#{$2}'>#{$2}</a>#{$3}"
       end
+
+      # Escape author
+      author = Rack::Utils.escape_html( author )
     end
   end
 end

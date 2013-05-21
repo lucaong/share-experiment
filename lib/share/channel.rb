@@ -1,7 +1,17 @@
 module Share
   class Channel < ActiveRecord::Base
     before_create :set_slug
-    has_many :messages
+    #has_many :messages
+
+    def messages
+      Message.all_in_channel( self )
+    end
+
+    def push_message( message_hash )
+      message = Message.new( message_hash )
+      message.persist_to_channel!( self )
+      message
+    end
 
     private
 

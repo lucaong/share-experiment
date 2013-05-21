@@ -9,6 +9,7 @@ gem "sinatra-activerecord"
 gem "sinatra-contrib"
 gem "activesupport"
 gem "sqlite3"
+gem "redis"
 
 gem "faye"
 gem "thin"
