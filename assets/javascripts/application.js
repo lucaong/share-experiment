@@ -1,8 +1,10 @@
 // JS here
 
-//= include bootstrap/bootstrap.js
-//= include lib/cartograph
-//= include lib/moment
-//= include lib/cookie
+//= require bootstrap/bootstrap.js
+//= require lib/cartograph
+//= require lib/moment
+//= require lib/cookie
+//= require lib/controller
 
-//= include app/routes
+//= require_directory ./app/controllers
+//= require app/routes
