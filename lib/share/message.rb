@@ -45,15 +45,13 @@ module Share
 
     def persist_to_channel!( channel )
       process!
-      self.created_at = Time.now.utc.to_s
+      self.created_at = Time.now.utc
       ids_key = self.class.redis_ids_key( channel.id )
-      redis.watch( ids_key ) do
-        id = redis.zcard( ids_key ) + 1
-        redis.multi do
-          key = self.class.redis_key( channel.id, id )
-          redis.mset key, to_json
-          redis.zadd self.class.redis_ids_key( channel.id ), Time.now.utc.to_i, id
-        end
+      id = SecureRandom.uuid
+      redis.multi do
+        key = self.class.redis_key( channel.id, id )
+        redis.mset key, to_json
+        redis.zadd self.class.redis_ids_key( channel.id ), Time.now.utc.to_i, id
       end
     end
 
