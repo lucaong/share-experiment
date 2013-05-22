@@ -12,18 +12,11 @@ module Share
         return [] if ids.empty?
 
         keys      = ids.map { |i| redis_key( channel.id, i ) }
-        to_remove = []
         messages  = []
 
-        redis.mget( *keys ).each_with_index do |raw, i|
-          if raw
-            messages << new( JSON.parse( raw ) )
-          else
-            to_remove << ids[i]
-          end
+        redis.mget( *keys ).each do |raw|
+          messages << new( JSON.parse( raw ) ) if raw
         end
-
-        redis.zrem ids_key, to_remove if to_remove.any?
         messages
       end
 
@@ -64,7 +57,8 @@ module Share
       redis.multi do
         key = self.class.redis_key( channel.id, id )
         redis.setex key, EXPIRATION_TIME, to_json
-        redis.zadd self.class.redis_ids_key( channel.id ), Time.now.utc.to_i, id
+        redis.zadd ids_key, Time.now.utc.to_i, id
+        redis.expire ids_key, EXPIRATION_TIME
       end
     end
 
