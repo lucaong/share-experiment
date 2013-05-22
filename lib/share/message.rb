@@ -3,15 +3,28 @@ require "redis"
 module Share
   class Message
     attr_accessor :body, :author, :created_at, :id
+    EXPIRATION_TIME = 60 * 60 * 3 # messages expire after 3 hours
 
     module ClassMethods
       def all_in_channel( channel )
-        ids = redis.zrange redis_ids_key( channel.id ), 0, -1
+        ids_key = redis_ids_key( channel.id )
+        ids     = redis.zrange ids_key, 0, -1
         return [] if ids.empty?
-        keys = ids.map { |i| redis_key( channel.id, i ) }
-        redis.mget( *keys ).map do |raw|
-          new JSON.parse( raw )
+
+        keys      = ids.map { |i| redis_key( channel.id, i ) }
+        to_remove = []
+        messages  = []
+
+        redis.mget( *keys ).each_with_index do |raw, i|
+          if raw
+            messages << new( JSON.parse( raw ) )
+          else
+            to_remove << ids[i]
+          end
         end
+
+        redis.zrem ids_key, to_remove if to_remove.any?
+        messages
       end
 
       def redis_ids_key( channel_id )
@@ -50,7 +63,7 @@ module Share
       id = SecureRandom.uuid
       redis.multi do
         key = self.class.redis_key( channel.id, id )
-        redis.mset key, to_json
+        redis.setex key, EXPIRATION_TIME, to_json
         redis.zadd self.class.redis_ids_key( channel.id ), Time.now.utc.to_i, id
       end
     end
