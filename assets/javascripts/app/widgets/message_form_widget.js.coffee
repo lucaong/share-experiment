@@ -4,12 +4,12 @@ class MessageFormWidget
     $( selector ).on "submit keyup", ( event ) ->
       return true if event.type is "keyup" and event.which isnt 13
 
+      event.preventDefault()
+
       author = context.authorCookie.get()
       unless author?
         $("#author_prompt").modal()
         return true
-
-      event.preventDefault()
 
       $input = $(@).find("[name=body]")
       body   = $input.val()

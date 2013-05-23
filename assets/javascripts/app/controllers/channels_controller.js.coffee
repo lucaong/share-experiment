@@ -7,7 +7,7 @@ class ChannelsController extends Controller
   show: ->
     slug = @params.slug
     scrollToBottom()
-    updateTimeAgo()
+    loopUpdateTimeAgo()
 
     @pubsub       = new Faye.Client "/faye"
     @authorCookie = new Cookie("#{slug}_author")
@@ -32,5 +32,9 @@ class ChannelsController extends Controller
     $("ul.messages li").each ->
       $li = $(@)
       $li.attr "data-time-ago", moment( $li.data("createdAt") ).fromNow()
+
+  loopUpdateTimeAgo = ->
+    updateTimeAgo()
+    setTimeout loopUpdateTimeAgo, 30000
 
 @ChannelsController = ChannelsController
