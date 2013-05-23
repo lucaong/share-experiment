@@ -69,8 +69,18 @@ module Share
     end
 
     def process!
-      # Escape body (but leave slashes)
-      body.gsub! /&|<|>|'|"/ do |c|
+      escape_html!( body )
+      link_urls!( body )
+      link_twitter_usernames!( body )
+      link_email_addresses!( body )
+
+      escape_html!( author )
+      link_twitter_usernames!( author )
+    end
+
+    def escape_html!( text )
+      # Escape html (but leave slashes)
+      text.gsub! /&|<|>|'|"/ do |c|
         escaped = {
           "&"=>"&amp;",
           "<"=>"&lt;",
@@ -79,28 +89,33 @@ module Share
         }
         escaped[c]
       end
+      text
+    end
 
+    def link_twitter_usernames!( text )
+      text.gsub! /(^|\s)@(\w+)/ do
+        "#{$1}<a href='https://twitter.com/#{$2}' target='_blank'>@#{$2}</a>"
+      end
+      text
+    end
+
+    def link_email_addresses!( text )
+      text.gsub! /(\b)([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4})(\b)/i do
+        "#{$1}<a href='mailto:#{$2}'>#{$2}</a>#{$3}"
+      end
+      text
+    end
+
+    def link_urls!( text )
       # Decorate URLs. RegExp pattern from:
       # http://daringfireball.net/2010/07/improved_regex_for_matching_urls
       url_regexp = /(?i)\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/
-      body.gsub! url_regexp do |orig|
+      text.gsub! url_regexp do |orig|
         url = orig
         url = "http://#{url}" unless url.match /^[a-z][\w-]+:/
         "<a href='#{url}' target='_blank'>#{orig}</a>"
       end
-
-      # Decorate Twitter handles
-      body.gsub! /(^|\s)@(\w+)/ do
-        "#{$1}<a href='https://twitter.com/#{$2}' target='_blank'>@#{$2}</a>"
-      end
-
-      # Decorate email addresses
-      body.gsub! /(\b)([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4})(\b)/i do
-        "#{$1}<a href='mailto:#{$2}'>#{$2}</a>#{$3}"
-      end
-
-      # Escape author
-      author = Rack::Utils.escape_html( author )
+      text
     end
   end
 end
