@@ -57,11 +57,19 @@
       width: 100%;
       overflow: auto;
 
-      &:before {
-        content: attr(data-author) ":";
+      .author {
         display: inline-block;
         color: #999;
         margin-right: 0.25em;
+
+        a {
+          color: #999;
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
       }
 
       &:after {

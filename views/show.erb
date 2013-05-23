@@ -10,9 +10,8 @@
 
 <ul class="messages">
   <% channel.messages.each do |message| %>
-    <li
-      data-author="<%= message.author %>"
-      data-created-at="<%= message.created_at %>">
+    <li data-created-at="<%= message.created_at %>">
+      <span class="author"><%= message.author %></span>
       <%= message.body %>
     </li>
   <% end %>
