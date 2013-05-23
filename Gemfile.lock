@@ -47,6 +47,7 @@ GEM
     http_parser.rb (0.5.3)
     i18n (0.6.1)
     multi_json (1.7.3)
+    pg (0.15.1)
     rack (1.5.2)
     rack-protection (1.5.0)
       rack
@@ -96,6 +97,7 @@ DEPENDENCIES
   activesupport
   coffee-script
   faye
+  pg
   rake
   redis
   sass

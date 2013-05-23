@@ -8,7 +8,6 @@ gem "activerecord"
 gem "sinatra-activerecord"
 gem "sinatra-contrib"
 gem "activesupport"
-gem "sqlite3"
 gem "redis"
 
 gem "faye"
@@ -21,4 +20,9 @@ gem "sass"
 
 group :development do
   gem "shotgun"
+  gem "sqlite3"
+end
+
+group :production do
+  gem "pg"
 end
