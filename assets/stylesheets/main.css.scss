@@ -59,6 +59,10 @@
 
       .author {
         display: inline-block;
+        max-width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         color: #999;
         margin-right: 0.25em;
 

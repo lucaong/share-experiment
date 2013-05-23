@@ -69,11 +69,13 @@ module Share
     end
 
     def process!
+      self.body = body.slice(0, 1000)
       escape_html!( body )
       link_urls!( body )
       link_twitter_usernames!( body )
       link_email_addresses!( body )
 
+      self.author = author.slice(0, 50)
       escape_html!( author )
       link_twitter_usernames!( author )
     end
