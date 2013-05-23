@@ -1,6 +1,17 @@
 [role=main] {
   max-width: 700px;
 
+  small, .small {
+    font-size: 12px;
+    color: #999;
+  }
+
+  form {
+    label {
+      font-weight: bold;
+    }
+  }
+
   .centered {
     text-align: center;
   }

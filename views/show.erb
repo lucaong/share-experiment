@@ -31,7 +31,8 @@
   </header>
   <section class="modal-body">
     <h3>Scan this QR Code:</h3>
-    <img src="http://qrfree.kaywa.com/?l=1&s=8&d=<%= CGI::escape request.url %>">
+    <img
+      src="http://qrfree.kaywa.com/?l=1&s=8&d=<%= CGI::escape request.url %>">
 
     <hr>
 
@@ -39,13 +40,26 @@
   </section>
 </aside>
 
-<form class="modal hide fade" role="dialog" id="author_prompt">
+<form class="modal hide fade form-horizontal" role="dialog" id="author_prompt">
   <header class="modal-header">
     <button class="close" data-dismiss="modal">×</button>
     <h2>Choose a Name</h2>
   </header>
   <section class="modal-body">
-    <input type="text" name="author_name" placeholder="Your name here">
+    <fieldset class="control-group text-left">
+      <label class="control-label" for="author_name">Your name: </label>
+      <div class="controls">
+        <input
+          type="text"
+          name="author_name"
+          id="author_name"
+          placeholder="e.g. Bob or @bob">
+        <div class="small">
+          <strong>Tip:</strong>
+          you can use your Twitter username by prefixing it with @
+        </div>
+      </div>
+    </fieldset>
   </section>
   <footer class="modal-footer">
     <button class="btn btn-success" type="submit">Ok</button>
