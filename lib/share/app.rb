@@ -12,7 +12,7 @@ module Share
     register Sinatra::ActiveRecordExtension
     register Sinatra::Contrib
 
-    set :database, defined?( DATABASE_URL ) ? DATABASE_URL : "sqlite3:///share.sqlite3"
+    set :database, ENV["DATABASE_URL"] || "sqlite3:///share.sqlite3"
     set :root, "./"
     set :public_folder, "./public"
 
