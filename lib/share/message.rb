@@ -1,5 +1,6 @@
 # encoding: utf-8
 require "redis"
+require "uri"
 
 module Share
   class Message
@@ -30,7 +31,12 @@ module Share
       end
 
       def redis
-        @_redis ||= Redis.new
+        uri = URI.parse( ENV["REDISTOGO_URL"] || "http://localhost:6379" )
+        @_redis ||= Redis.new(
+          host: uri.host,
+          port: uri.port,
+          password: uri.password
+        )
       end
     end
 
