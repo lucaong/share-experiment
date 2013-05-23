@@ -1,4 +1,5 @@
 .DS_Store
 tmp
 *.sqlite3
+*.rdb
 .sass-cache
