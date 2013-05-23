@@ -15,6 +15,7 @@ module Share
     unless defined?( DATABASE_URL )
       set :database, "sqlite3:///share.sqlite3"
     end
+
     set :root, "./"
     set :public_folder, "./public"
 
