@@ -1,3 +1,4 @@
+#= require lib/visibility.core
 #= require app/widgets/message_widget
 #= require app/widgets/message_form_widget
 #= require app/widgets/author_form_widget
@@ -15,6 +16,7 @@ class ChannelsController extends Controller
     @pubsub.subscribe "/channels/#{ slug }", ( message ) ->
       message_widget = new MessageWidget( message )
       $("ul.messages").append message_widget.render()
+      notifyNewMessage()
       scrollToBottom()
       updateTimeAgo()
 
@@ -36,5 +38,26 @@ class ChannelsController extends Controller
   loopUpdateTimeAgo = ->
     updateTimeAgo()
     setTimeout loopUpdateTimeAgo, 30000
+
+  _original_title = null
+  _flash_title_iter   = 0
+
+  notifyNewMessage = ->
+    _original_title ?= $("head title").text()
+    flashTitleLoop( _original_title )
+
+  flashTitleLoop = ( title ) ->
+    if Visibility.hidden()
+      flashTitle( title )
+      setTimeout ( -> flashTitleLoop( title ) ), 1000
+    else
+      $("head title").text( title )
+
+  flashTitle = ( title ) ->
+    prefix = "-"
+    if _flash_title_iter % 2
+      prefix = "+"
+    $("head title").text("#{prefix} #{title}")
+    _flash_title_iter += 1
 
 @ChannelsController = ChannelsController
