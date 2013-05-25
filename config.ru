@@ -2,10 +2,8 @@ require "bundler/setup"
 require "./lib/share"
 require "faye"
 
-if Share::App.development?
-  map "/assets" do
-    run Share::App.sprockets
-  end
+map "/assets" do
+  run Share::App.sprockets
 end
 
 Faye::WebSocket.load_adapter('thin')
