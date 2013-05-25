@@ -64,14 +64,26 @@ module Share
 
     # create new message in channel
     post "/:slug" do
-      channel = Channel.find_by_slug params[:slug]
+      pubsub  = pubsub_client(request)
+      slug    = params[:slug]
+      channel = Channel.find_by_slug slug
+
+      raise "Channel '#{slug}' not found" if not channel
+
       message = channel.push_message(
         "body"   => params[:body],
         "author" => params[:author]
       )
+      pubsub.publish( "/channels/#{slug}", message.to_h )
       respond_with :show, channel: channel do |type|
         type.json { message.to_json }
       end
+    end
+
+    private
+
+    def pubsub_client(request)
+      Faye::Client.new( "#{request.base_url}/faye" )
     end
   end
 end

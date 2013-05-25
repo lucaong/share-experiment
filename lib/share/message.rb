@@ -42,12 +42,16 @@ module Share
 
     extend ClassMethods
 
-    def to_json
-      return {
+    def to_h
+      {
         body:       body,
         author:     author,
         created_at: created_at
-      }.to_json
+      }
+    end
+
+    def to_json
+      to_h.to_json
     end
 
     def initialize( attrs )

@@ -18,8 +18,6 @@ class MessageFormWidget
 
       if body.length
         $.post( "/#{slug}", { body: body, author: author }, "json" )
-          .done ( data ) ->
-            context.pubsub.publish "/channels/#{slug}", data
           .fail ->
             alert "Failed sending message"
 
