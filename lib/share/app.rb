@@ -15,6 +15,7 @@ module Share
     set :database, ENV["DATABASE_URL"] || "sqlite3:///share.sqlite3"
     set :root, "./"
     set :public_folder, "./public"
+    set :sessions, true
 
     # asset pipeline
     register Sinatra::Sprockets::Helpers
@@ -48,6 +49,17 @@ module Share
       end
     end
 
+    # render bookmarklet
+    get "/bookmarklet.js" do
+      channel = params[:channel]
+      body    = params[:body]
+      author  = session[:author] || 'Anonymous'
+
+      respond_with 'bookmarklet.js' do |type|
+        type.js { erb :'bookmarklet.js', layout: false }
+      end
+    end
+
     # show channel
     get "/:slug" do
       channel = Channel.find_by_slug params[:slug]
@@ -64,15 +76,16 @@ module Share
 
     # create new message in channel
     post "/:slug" do
-      pubsub  = pubsub_client(request)
-      slug    = params[:slug]
-      channel = Channel.find_by_slug slug
+      pubsub           = pubsub_client(request)
+      slug             = params[:slug]
+      session[:author] = params[:author]
+      channel          = Channel.find_by_slug slug
 
       raise "Channel '#{slug}' not found" if not channel
 
       message = channel.push_message(
         "body"   => params[:body],
-        "author" => params[:author]
+        "author" => params[:author] || 'Anonymous'
       )
       pubsub.publish( "/channels/#{slug}", message.to_h )
       respond_with :show, channel: channel do |type|

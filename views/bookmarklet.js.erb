@@ -1,0 +1,32 @@
+// TODO: Channel is hardcoded, how do we get it?
+// TODO: POST request is not in the background, navigates away from page. Bookmarklet interaction is confusing to me, what do?
+// TODO: POST request of https page to our own http page shows warning
+// TODO: Strange "Unexpected error" sometimes
+
+// Copy-pasta from SO: http://stackoverflow.com/questions/133925/javascript-post-request-like-a-form-submit
+function post_to_url(path, params, method) {
+  method = method || "post"; // Set method to post by default if not specified.
+
+  // The rest of this code assumes you are not using a library.
+  // It can be made less wordy if you use one.
+  var form = document.createElement("form");
+  form.setAttribute("method", method);
+  form.setAttribute("action", path);
+
+  for(var key in params) {
+    if(params.hasOwnProperty(key)) {
+      var hiddenField = document.createElement("input");
+      hiddenField.setAttribute("type", "hidden");
+      hiddenField.setAttribute("name", key);
+      hiddenField.setAttribute("value", params[key]);
+
+      form.appendChild(hiddenField);
+    }
+  }
+
+  document.body.appendChild(form);
+  form.submit();
+}
+
+// TODO: Super-mega hardcoded channel, needs to be more flexible
+post_to_url('<%= request.base_url %>/ifDImf', {body: location.href});
