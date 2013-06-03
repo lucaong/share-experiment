@@ -18,6 +18,9 @@ gem "sprockets-helpers"
 gem "coffee-script"
 gem "sass"
 
+gem "capistrano"
+gem "sprinkle"
+
 group :development do
   gem "shotgun"
   gem "sqlite3"
