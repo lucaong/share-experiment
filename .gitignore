@@ -4,3 +4,4 @@ tmp
 *.rdb
 .sass-cache
 public/*
+.vagrant
