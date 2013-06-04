@@ -1,3 +1,4 @@
+# Capistrano options for Vagrant (development stage)
 set :user, "vagrant"
 set :run_method, :sudo
 

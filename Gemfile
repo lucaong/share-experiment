@@ -20,6 +20,7 @@ gem "sass"
 
 gem "capistrano"
 gem "sprinkle"
+gem "erubis"
 
 group :development do
   gem "shotgun"
