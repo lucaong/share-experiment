@@ -1,4 +1,5 @@
 require "./deploy/packages/essentials"
+require "./deploy/packages/git"
 require "./deploy/packages/nginx"
 require "./deploy/packages/postgres"
 require "./deploy/packages/redis"
@@ -6,6 +7,7 @@ require "./deploy/packages/ruby"
 
 policy :appserver, :roles => :app do
   requires :essentials
+  requires :version_control
   requires :webserver
   requires :database
   requires :redis
