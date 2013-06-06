@@ -12,10 +12,10 @@ package :rvm do
 end
 
 package :default_ruby do
-  runner '~/.rvm/bin/rvm install 2.0.0-p0'
-  runner '~/.rvm/bin/rvm use --default 2.0.0-p0'
+  runner '~/.rvm/bin/rvm install ruby-2.0.0-p195'
+  runner '~/.rvm/bin/rvm use --default 2.0.0-p195'
 
   verify do
-    has_executable '~/.rvm/rubies/ruby-2.0.0-p0/bin/ruby'
+    has_executable '~/.rvm/rubies/ruby-2.0.0-p195/bin/ruby'
   end
 end
