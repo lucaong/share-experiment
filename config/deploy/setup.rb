@@ -20,7 +20,7 @@ policy :appserver, :roles => :app do
     :root_path => SETTINGS[:deploy_to]
   requires :database
   requires :redis
-  requires :ruby
+  requires :ruby, :ruby_version => SETTINGS[:ruby_version]
 end
 
 deployment do

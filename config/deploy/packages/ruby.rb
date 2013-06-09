@@ -1,21 +1,20 @@
 package :ruby do
   description "RVM and Ruby programming language"
-  requires :rvm, :default_ruby
+  requires :rvm, :ruby_version, opts
 end
 
 package :rvm do
-  runner 'curl -L https://get.rvm.io | bash -s stable'
+  runner '\curl -L https://get.rvm.io | bash -s stable'
 
   verify do
     has_executable '~/.rvm/bin/rvm'
   end
 end
 
-package :default_ruby do
-  runner '~/.rvm/bin/rvm install ruby-2.0.0-p195'
-  runner '~/.rvm/bin/rvm use --default 2.0.0-p195'
+package :ruby_version do
+  runner "~/.rvm/bin/rvm install #{opts[:ruby_version]}"
 
   verify do
-    has_executable '~/.rvm/rubies/ruby-2.0.0-p195/bin/ruby'
+    has_executable "~/.rvm/rubies/ruby-#{opts[:ruby_version]}/bin/ruby"
   end
 end
