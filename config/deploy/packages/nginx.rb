@@ -1,6 +1,6 @@
 package :nginx, :provides => :webserver do
   description 'Nginx Web Server'
-  requires :nginx_core, :nginx_config, :nginx_autostart
+  requires :nginx_core, :nginx_config, :nginx_autostart, opts
 end
 
 package :nginx_core do
@@ -12,12 +12,9 @@ package :nginx_core do
 end
 
 package :nginx_config do
-  domain      = "shareapp.com"
-  application = "shareapp"
-
   transfer File.expand_path('../files/nginx.conf', File.dirname(__FILE__)),
     '/etc/nginx/nginx.conf', :render => true, :sudo => true,
-    :locals => { :domain => domain, :application => application }
+    :locals => opts
 end
 
 package :nginx_autostart do

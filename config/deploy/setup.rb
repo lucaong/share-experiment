@@ -2,6 +2,9 @@
 #   STAGE=<development|production> sprinkle -s config/deploy/setup.rb
 #
 
+require File.expand_path("../settings.rb", File.dirname(__FILE__))
+STAGE = ENV['STAGE'] || 'development'
+
 require "./config/deploy/packages/essentials"
 require "./config/deploy/packages/git"
 require "./config/deploy/packages/nginx"
@@ -12,7 +15,9 @@ require "./config/deploy/packages/ruby"
 policy :appserver, :roles => :app do
   requires :essentials
   requires :version_control
-  requires :webserver
+  requires :webserver,
+    :domain    => SETTINGS[STAGE.to_sym][:domain],
+    :root_path => SETTINGS[:deploy_to]
   requires :database
   requires :redis
   requires :ruby
@@ -21,7 +26,7 @@ end
 deployment do
   delivery :capistrano do
     recipes 'deploy'
-    recipes "config/deploy/#{ENV['STAGE'] || 'development'}"
+    recipes "config/deploy/#{STAGE}"
   end
 
   source do
