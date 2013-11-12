@@ -1,6 +1,7 @@
 # encoding: utf-8
 require "redis"
 require "uri"
+require "onebox"
 
 module Share
   class Message
@@ -82,7 +83,15 @@ module Share
     def process!
       self.body = body.slice(0, 1000)
       escape_html!( body )
-      link_urls!( body )
+
+      map_urls!( body ) do |url|
+        result = nil
+        result ||= onebox_preview( url )
+        result ||= link_url( url )
+        result ||= url
+        result
+      end
+
       link_twitter_usernames!( body )
       link_email_addresses!( body )
 
@@ -119,16 +128,28 @@ module Share
       text
     end
 
-    def link_urls!( text )
+    def map_urls!( text )
       # Decorate URLs. RegExp pattern from:
       # http://daringfireball.net/2010/07/improved_regex_for_matching_urls
       url_regexp = /(?i)\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/
-      text.gsub! url_regexp do |orig|
-        url = orig
-        url = "http://#{url}" unless url.match /^[a-z][\w-]+:/
-        "<a href='#{url}' target='_blank'>#{orig}</a>"
-      end
+      text.gsub!( url_regexp ) { |orig| yield orig }
       text
+    end
+
+    def link_url( orig )
+      url = orig
+      url = "http://#{url}" unless url.match /^[a-z][\w-]+:/
+      "<a href='#{url}' target='_blank'>#{orig}</a>"
+    end
+
+    def onebox_preview( url )
+      matcher = Onebox::Matcher.new( url )
+
+      if matcher.oneboxed
+        Onebox.preview( url ).to_s
+      else
+        nil
+      end
     end
   end
 end

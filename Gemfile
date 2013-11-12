@@ -13,6 +13,8 @@ gem "redis"
 gem "faye"
 gem "thin"
 
+gem "onebox"
+
 gem "sprockets", "~> 2.0"
 gem "sprockets-helpers"
 gem "coffee-script"
@@ -25,6 +27,7 @@ gem "erubis"
 group :development do
   gem "shotgun"
   gem "sqlite3"
+  gem "pry"
 end
 
 group :production do
